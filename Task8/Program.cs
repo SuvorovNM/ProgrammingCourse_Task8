@@ -58,16 +58,6 @@ namespace Task8
                 this.children.addChild(node);
         }
     }
-    /*class Edge
-    {
-        public int First, Second;
-        public Edge(int a=-1,int b=-1)
-        {
-            First = a;
-            Second = b;
-        }
-
-    }*/
     class Program
     {
         const string mistake = "Введено не корректное число";
@@ -85,6 +75,7 @@ namespace Task8
         static int[,] Generator()//Генератор матрицы
         {
             List<string> First = new List<string>();
+            //Допустимое кол-во вершин от 3 до 11 включительно для быстрой проверки результата работы вручную
             int V = rng.Next(3, 12);
             int E = rng.Next(0, V * (V - 1) / 2 + 1);
             int[,] matr = new int[V, E];
@@ -129,14 +120,17 @@ namespace Task8
         static void Show(int[,] matr)//Вывод матрицы
         {
             if (matr.GetLength(1) == 0)
-                Console.WriteLine("Матрица состоит из "+ matr.GetLength(0)+" вершин и не содержит ребер");
-            for (int i = 0; i < matr.GetLength(0); i++)
+                Console.WriteLine("Матрица состоит из " + matr.GetLength(0) + " вершин и не содержит ребер");
+            else
             {
-                for (int j = 0; j < matr.GetLength(1); j++)
+                for (int i = 0; i < matr.GetLength(0); i++)
                 {
-                    Console.Write(matr[i, j] + " ");
+                    for (int j = 0; j < matr.GetLength(1); j++)
+                    {
+                        Console.Write(matr[i, j] + " ");
+                    }
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
             }
         }
         static Node MakeTree(Node tree,int[,]matr,int maxI,List<int> nodes)
@@ -259,7 +253,7 @@ namespace Task8
                 Show(matr);
                 adj = ToAdjacency(matr);
                 Console.WriteLine("Введите кол-во вершин в пустом подмножестве: ");
-                CheckNumber(out K, 1, vertex-1);
+                CheckNumber(out K, 1, vertex);
             }
             //count - кол-во ребер, исходящих из вершины
             int[] count = new int[adj.GetLength(0)];
@@ -308,23 +302,30 @@ namespace Task8
             else
                 Console.WriteLine("Пустое подмножество длины " + K + " отсутствует");
             Console.WriteLine("Все подмножества: ");
-            //Подмножества имеют тенденцию повторяться в дереве, следовательно, нужно убрать все дубликаты и вывести только уникальные
-            List<string> ToCheck = new List<string>();
-            foreach(string str in empties)
+            Console.WriteLine(@"
+Хотите ли вы вывести все пустые подграфы?
+Нажмите 1 для вывода их, или любую другую для выхода из программы");
+            string st = Console.ReadLine();
+            if (st == "1")
             {
-                string stemp = str.Substring(1);
-                string[] temp = stemp.Split(' ');
-                int[] forsort = new int[temp.Length];
-                for (int i = 0; i < temp.Length; i++)
+                //Подмножества имеют тенденцию повторяться в дереве, следовательно, нужно убрать все дубликаты и вывести только уникальные
+                List<string> ToCheck = new List<string>();
+                foreach (string str in empties)
                 {
-                    Int32.TryParse(temp[i], out forsort[i]);
-                }
-                Array.Sort(forsort);
-                stemp = String.Concat<int>(forsort);
-                if (!ToCheck.Contains(stemp))
-                {
-                    ToCheck.Add(stemp);
-                    Console.WriteLine(str);
+                    string stemp = str.Substring(1);
+                    string[] temp = stemp.Split(' ');
+                    int[] forsort = new int[temp.Length];
+                    for (int i = 0; i < temp.Length; i++)
+                    {
+                        Int32.TryParse(temp[i], out forsort[i]);
+                    }
+                    Array.Sort(forsort);//Сортировка элементов в множестве вершин пустого подграфа
+                    stemp = String.Concat<int>(forsort);
+                    if (!ToCheck.Contains(stemp))
+                    {
+                        ToCheck.Add(stemp);
+                        Console.WriteLine(str);
+                    }
                 }
             }
             //Node tree1 = tree;
