@@ -300,14 +300,14 @@ namespace Task8
             if (Answer != "")
                 Console.WriteLine("Пустое подмножество длины " + K + ":" + Answer);
             else
-                Console.WriteLine("Пустое подмножество длины " + K + " отсутствует");
-            Console.WriteLine("Все подмножества: ");
+                Console.WriteLine("Пустое подмножество длины " + K + " отсутствует");            
             Console.WriteLine(@"
 Хотите ли вы вывести все пустые подграфы?
 Нажмите 1 для вывода их, или любую другую для выхода из программы");
             string st = Console.ReadLine();
             if (st == "1")
             {
+                Console.WriteLine("Все подмножества: ");
                 //Подмножества имеют тенденцию повторяться в дереве, следовательно, нужно убрать все дубликаты и вывести только уникальные
                 List<string> ToCheck = new List<string>();
                 foreach (string str in empties)
